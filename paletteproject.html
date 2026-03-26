@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Palette Generator</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+    padding: 50px;
+}
+h1 {
+    margin-bottom: 20px;
+}
+.palette {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.color-box {
+    width: 100px;
+    height: 100px;
+    margin: 0 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    position: relative;
+}
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.tooltip {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #000;
+    color: #fff;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+</style>
+</head>
+<body>
+<h1>🎨 Color Palette Generator</h1>
+<div class="palette" id="palette"></div>
+<button onclick="generatePalette()">Generate Palette</button>
+
+<script>
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function generatePalette() {
+    const paletteDiv = document.getElementById('palette');
+    paletteDiv.innerHTML = '';
+    for (let i = 0; i < 5; i++) {
+        const color = getRandomColor();
+        const box = document.createElement('div');
+        box.className = 'color-box';
+        box.style.backgroundColor = color;
+        box.textContent = color;
+
+        const tooltip = document.createElement('span');
+        tooltip.className = 'tooltip';
+        tooltip.textContent = 'Copied!';
+        box.appendChild(tooltip);
+
+        box.addEventListener('click', () => {
+            navigator.clipboard.writeText(color)
+                .then(() => {
+                    tooltip.style.opacity = 1;
+                    setTimeout(() => { tooltip.style.opacity = 0; }, 800);
+                })
+                .catch(err => console.error('Failed to copy: ', err));
+        });
+
+        paletteDiv.appendChild(box);
+    }
+}
+
+generatePalette();
+</script>
+</body>
+</html>
